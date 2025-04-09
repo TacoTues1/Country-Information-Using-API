@@ -47,7 +47,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className={`search-wrapper ${isActiveSearch ? 'search-top' : 'search-center'}`}>
+        <div>
           <label htmlFor="search" className="search-label">SEARCH FOR ANY COUNTRY</label>
+          <p className="credit-text">BY ALFONZ PEREZ</p>
+        </div>
           <input
             id="search"
             type="text"

@@ -100,13 +100,20 @@
   margin: 0;
 }
 
-.search-label {
+.search-label{
   font-size: 18px;
+  font-weight: bold;
+  display: block;
+  color: white;
+  animation: bounce 2.5s infinite;
+}
+.credit-text {
+  font-size: 10px;
   font-weight: bold;
   margin-bottom: 8px;
   display: block;
   color: white;
-  animation: bounce 2.5s infinite;
+  /* animation: bounce 2.5s infinite; */
 }
 
 .search-input {
