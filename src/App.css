@@ -99,13 +99,31 @@
   padding: 0;
   margin: 0;
 }
-
+.App-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  /* background-color: transparent; */
+  color: white;
+  /* padding: 10px 0; */
+  font-size: 14px;
+  height: 40px;
+}
 .search-label{
   font-size: 18px;
   font-weight: bold;
   display: block;
   color: white;
   animation: bounce 2.5s infinite;
+}
+.title-label{
+  font-size: 30px;
+  font-weight: bold;
+  display: block;
+  color: white;
+  margin-top: 10px;
 }
 .credit-text {
   font-size: 10px;

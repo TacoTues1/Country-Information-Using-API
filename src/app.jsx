@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header /> {/* Add the Header component */}
       <div className={`search-wrapper ${isActiveSearch ? 'search-top' : 'search-center'}`}>
         <div>
           <label htmlFor="search" className="search-label">SEARCH FOR ANY COUNTRY</label>
