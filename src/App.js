@@ -94,7 +94,7 @@ function App() {
 
           <div className="filter-wrapper">
             <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
-              <option value="">All Regions</option>
+              <option value="">Select Regions</option>
               <option value="Africa">Africa</option>
               <option value="Americas">Americas</option>
               <option value="Asia">Asia</option>
