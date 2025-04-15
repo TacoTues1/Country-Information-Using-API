@@ -1,5 +1,6 @@
 * {
   background-color: #065465;
+  /* overflow: hidden; */
 }
 .App-header {
   display: flex;
@@ -22,7 +23,7 @@
 }
 
 .search-top {
-  top: 150px;
+  top: 215px;
   transform: translateX(-50%);
 }
 .country-card {
@@ -130,15 +131,6 @@
   color: white;
   margin-top: 10px;
 }
-.credit-text {
-  font-size: 10px;
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
-  color: white;
-  /* animation: bounce 2.5s infinite; */
-}
-
 .search-input {
   padding: 10px;
   font-size: 16px;
@@ -172,7 +164,7 @@
   justify-content: center;
   align-items: center;
   min-height: 40vh;
-  margin-top: 250px;
+  margin-top: 150px;
   gap: 20px;
   text-align: center;
 }
@@ -234,20 +226,34 @@
   overflow: hidden;
   /* white-space: nowrap; */
   width: 100%;
-  margin-top: 20px;
+  margin-top: 50px;
   position: relative;
+  padding-top: 20px;
+  padding-bottom: 50px;
 }
 .flag-track {
   display: inline-flex;
   animation: scroll 150s linear infinite;
+  will-change: transform;
 }
 .flag-image {
   width: 100px;
   height: 60px;
   margin: 0px;
-  object-fit: contain;
   border: 1px solid #ccc;
+  object-fit: contain;
   /* border-radius: 4px; */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.flag-image:hover {
+  transform: scale(1.5); /* Enlarge the flag on hover */
+  z-index: 10; /* Ensure the hovered flag appears above others */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a shadow for better visibility */
+}
+.flag-track:hover .flag-image {
+  transform-origin: center; /* Ensure the flag enlarges from its center */
 }
 @keyframes scroll {
   0% {
