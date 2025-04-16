@@ -1,6 +1,5 @@
-* {
+body {
   background-color: #065465;
-  /* overflow: hidden; */
 }
 .App-header {
   display: flex;
@@ -36,13 +35,9 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
   max-width: 900px;
-  margin: 15px;
+  margin: 10px;
   text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.country-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .country-flag-container {
@@ -138,6 +133,7 @@
   max-width: 80%;
   border: 1px solid #ccc;
   border-radius: 8px;
+  background-color: transparent;
   color: white;
 }
 
@@ -148,6 +144,7 @@
   margin-top: 10px;
   flex-wrap: wrap;
   background: transparent;
+  color: white;
 }
 
 .filter-wrapper select {
@@ -155,7 +152,8 @@
   font-size: 14px;
   border-radius: 4px;
   border: 1px solid #ccc;
-  color: white;
+  background-color: transparent;
+  color: black;
 }
 
 .results-container {
@@ -248,12 +246,12 @@
 }
 
 .flag-image:hover {
-  transform: scale(1.5); /* Enlarge the flag on hover */
-  z-index: 10; /* Ensure the hovered flag appears above others */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a shadow for better visibility */
+  transform: scale(1.5);
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .flag-track:hover .flag-image {
-  transform-origin: center; /* Ensure the flag enlarges from its center */
+  transform-origin: center;
 }
 @keyframes scroll {
   0% {
@@ -274,4 +272,88 @@
   z-index: 1000;
   white-space: nowrap;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.plain-toggle {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 34px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: transparent;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: green;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.toggle-label {
+  font-weight: bold;
+}
+.plain-toggle {
+  position: relative;
+}
+
+.hover-modal {
+  display: none;
+  position: absolute;
+  top: -75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  width: 250%;
+  transition: opacity 0.3s ease;
+}
+
+.plain-toggle:hover .hover-modal {
+  display: block;
+  opacity: 1;
 }
