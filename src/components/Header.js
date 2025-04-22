@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../App.css';
-import FlagImage from './Flag';
 
-function Header({ searchTerm, onFlagsLoaded }) {
+function Header({ searchTerm }) {
   const [flags, setFlags] = useState([]);
+  const [isScrolling, setIsScrolling] = useState(true);
   const [hoveredCountry, setHoveredCountry] = useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  useEffect(() => {
+  if (!dataLoaded) {
     fetch('https://countries-api-abhishek.vercel.app/countries')
       .then((response) => response.json())
       .then((data) => {
         setFlags(data.data);
-        onFlagsLoaded(data.data); // Pass the loaded flags to App.js
+        setDataLoaded(true);
       })
       .catch((err) => console.error('Error fetching flags:', err));
-  }, [onFlagsLoaded]);
+  }
 
   const filteredFlags = searchTerm
     ? flags.filter((country) =>
@@ -24,11 +25,13 @@ function Header({ searchTerm, onFlagsLoaded }) {
     : flags;
 
   const handleMouseEnter = (country, event) => {
+    setIsScrolling(false);
     setHoveredCountry(country);
     setCursorPosition({ x: event.clientX, y: event.clientY });
   };
 
   const handleMouseLeave = () => {
+    setIsScrolling(true);
     setHoveredCountry(null);
   };
 
@@ -44,16 +47,22 @@ function Header({ searchTerm, onFlagsLoaded }) {
         </label>
       </div>
       <div className="flag-marquee">
-        <div className="flag-track">
+        <div
+          className="flag-track"
+          style={{
+            animationPlayState: isScrolling ? 'running' : 'paused',
+          }}
+        >
           {filteredFlags.map((country, index) => (
-            <div
+            <img
               key={index}
+              src={country.flag}
+              alt={`${country.name} flag`}
+              className="flag-image"
               onMouseEnter={(event) => handleMouseEnter(country, event)}
               onMouseLeave={handleMouseLeave}
               onMouseMove={handleMouseMove}
-            >
-              <FlagImage flag={country.flag} name={country.name} />
-            </div>
+            />
           ))}
         </div>
 
@@ -65,7 +74,13 @@ function Header({ searchTerm, onFlagsLoaded }) {
               left: `${cursorPosition.x + 10}px`,
             }}
           >
-            <p><strong>{hoveredCountry.name}</strong></p>
+            <strong>{hoveredCountry.name}</strong>
+            <br />
+            Capital: {hoveredCountry.capital || 'N/A'}
+            <br />
+            Region: {hoveredCountry.region || 'N/A'}
+            <br />
+            Population: {hoveredCountry.population?.toLocaleString() || 'N/A'}
           </div>
         )}
       </div>
