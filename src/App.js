@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -10,7 +10,11 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState('');
   const [populationFilter, setPopulationFilter] = useState('');
-  const [plainMode, setPlainMode] = useState(false); // ✅ new state
+  const [plainMode, setPlainMode] = useState(false);
+
+  useEffect(() => {
+    fetchCountries();
+  }, []);
 
   const fetchCountries = () => {
     setLoading(true);
@@ -31,10 +35,6 @@ function App() {
       });
   };
 
-  if (countries.length === 0 && !loading && !error) {
-    fetchCountries();
-  }
-
   const filterByPopulation = (country) => {
     if (!populationFilter) return true;
     if (populationFilter === 'small') return country.population < 1000000;
@@ -44,6 +44,8 @@ function App() {
   };
 
   const uniqueCountries = Array.from(new Map(countries.map((c) => [c.name, c])).values());
+
+  const isActiveSearch = searchTerm || selectedRegion || populationFilter;
 
   const filteredCountries = uniqueCountries.filter((country) => {
     const search = searchTerm.toLowerCase();
@@ -56,14 +58,12 @@ function App() {
     const matchesRegion = selectedRegion ? country.region === selectedRegion : true;
     const matchesPopulation = filterByPopulation(country);
 
-    if (selectedRegion) {
-      return matchesSearch && matchesRegion && matchesPopulation;
-    }
-
-    return matchesSearch && matchesPopulation;
+    return matchesSearch && matchesRegion && matchesPopulation;
   });
 
-  const isActiveSearch = searchTerm || selectedRegion || populationFilter;
+  const defaultCountry = countries.find((c) => c.name === 'Afghanistan');
+
+  const countriesToDisplay = isActiveSearch ? filteredCountries : defaultCountry ? [defaultCountry] : [];
 
   return (
     <div className="App">
@@ -99,30 +99,19 @@ function App() {
             <option value="large">&gt; 50M</option>
           </select>
 
-          {/* <div className="plain-toggle">
-  <label className="switch">
-    <input
-      type="checkbox"
-      checked={plainMode}
-      onChange={() => setPlainMode(!plainMode)}
-    />
-    <span className="slider round"></span>
-  </label>
-</div> */}
- <div className="plain-toggle">
-      <label className="switch">
-        <input
-          type="checkbox"
-          checked={plainMode}
-          onChange={() => setPlainMode(!plainMode)}
-        />
-        <span className="slider round"></span>
-      </label>
-
-      <div className="hover-modal">
-       Toggle Plain Mode
-      </div>
-    </div>
+          <div className="plain-toggle">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={plainMode}
+                onChange={() => setPlainMode(!plainMode)}
+              />
+              <span className="slider round"></span>
+            </label>
+            <div className="hover-modal">
+              Toggle Plain Mode
+            </div>
+          </div>
         </div>
       </div>
 
@@ -134,10 +123,8 @@ function App() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div className="results-container">
-        {!loading && !error && isActiveSearch && filteredCountries.map((country) => (
-          <div
-          key={country.name}
-          className="country-card">
+        {!loading && !error && countriesToDisplay.map((country) => (
+          <div key={country.name} className="country-card">
             <div className="country-flag-container">
               {country.flag && (
                 <img
@@ -147,20 +134,21 @@ function App() {
                 />
               )}
             </div>
-           <div className="country-info">           
+            <div className="country-info">
               {plainMode ? (
                 <div>
                   <p><strong>Name:</strong> {country.name}</p>
                   <p><strong>Capital:</strong> {country.capital || 'N/A'}</p>
                   <p><strong>Region:</strong> {country.region || 'N/A'}</p>
                   <p><strong>Subregion:</strong> {country.subregion || 'N/A'}</p>
-                  <p><strong>Population:</strong> {country.population || 'N/A'}</p>
-                  <p><strong>Area:</strong> {country.area || 'N/A'}</p>
-                  <p><strong>Coordinates:</strong> {country.coordinates ? `Lat: ${country.coordinates.latitude}, Long: ${country.coordinates.longitude}` : 'N/A'}</p>
+                  <p><strong>Population:</strong> {country.population?.toLocaleString() || 'N/A'}</p>
+                  <p><strong>Area:</strong> {country.area?.toLocaleString() || 'N/A'}</p>
+                  <p><strong>Coordinates:</strong> {country.coordinates ? `Latitude: ${country.coordinates.latitude}, Longtitude: ${country.coordinates.longitude}` : 'N/A'}</p>
                   <p><strong>Borders:</strong> {country.borders?.join(', ') || 'N/A'}</p>
                   <p><strong>Timezones:</strong> {country.timezones?.join(', ') || 'N/A'}</p>
                   <p><strong>Currency:</strong> {country.currency || 'N/A'}</p>
                   <p><strong>Languages:</strong> {country.languages || 'N/A'}</p>
+                  <p><strong>Flag:</strong> {country.flag || 'N/A'}</p>
                 </div>
               ) : (
                 <pre>{JSON.stringify({
@@ -168,8 +156,8 @@ function App() {
                   capital: country.capital || 'N/A',
                   region: country.region || 'N/A',
                   subregion: country.subregion || 'N/A',
-                  population: country.population || 'N/A',
-                  area: country.area || 'N/A',
+                  population: country.population?.toLocaleString() || 'N/A',
+                  area: country.area?.toLocaleString() || 'N/A',
                   coordinates: country.coordinates ? {
                     latitude: country.coordinates.latitude,
                     longitude: country.coordinates.longitude
@@ -186,7 +174,7 @@ function App() {
         ))}
       </div>
 
-      {!loading && !error && isActiveSearch && filteredCountries.length === 0 && (
+      {!loading && !error && isActiveSearch && countriesToDisplay.length === 0 && (
         <p className="no-result">No country found.</p>
       )}
 
